@@ -3,13 +3,15 @@ package E08Calculadora;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.jgoodies.forms.layout.FormLayout;
@@ -20,71 +22,85 @@ import javax.swing.JTextField;
 import java.awt.GridLayout;
 import java.awt.Font;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JLabel;
+import javax.swing.BoxLayout;
+import java.awt.CardLayout;
 
 public class Calculadora extends JFrame implements ActionListener {
 
-	private String cadenaNumeros = "";
-	private String operacion = "null";
 	private int refCalculo;
 	private Double numero;
 	private Double resultado;
 
 	/* BOTONES */
-	JButton button_0 = new JButton("0");
-	JButton button_1 = new JButton("1");
-	JButton button_2 = new JButton("2");
-	JButton button_3 = new JButton("3");
-	JButton button_4 = new JButton("4");
-	JButton button_5 = new JButton("5");
-	JButton button_6 = new JButton("6");
-	JButton button_7 = new JButton("7");
-	JButton button_8 = new JButton("8");
-	JButton button_9 = new JButton("9");
+	private JButton button_0 = new JButton("0");
+	private JButton button_1 = new JButton("1");
+	private JButton button_2 = new JButton("2");
+	private JButton button_3 = new JButton("3");
+	private JButton button_4 = new JButton("4");
+	private JButton button_5 = new JButton("5");
+	private JButton button_6 = new JButton("6");
+	private JButton button_7 = new JButton("7");
+	private JButton button_8 = new JButton("8");
+	private JButton button_9 = new JButton("9");
 
 	/* OPERACIONES */
-	JButton button_sumar = new JButton("+");
-	JButton button_division = new JButton("/");
-	JButton button_multi = new JButton("*");
-	JButton button_resta = new JButton("-");
-	JButton btnSqrt = new JButton("sqrt");
-	JButton button_modulo = new JButton("%");
+	private JButton button_sumar = new JButton("+");
+	private JButton button_division = new JButton("/");
+	private JButton button_multi = new JButton("*");
+	private JButton button_resta = new JButton("-");
+	private JButton btnSqrt = new JButton("sqrt");
+	private JButton button_modulo = new JButton("%");
 
 	/* OTROS BOTONES */
-	JButton button_igual = new JButton("=");
-	JButton button_punto = new JButton(".");
-	JButton btnClear = new JButton("C");
+	private JButton button_igual = new JButton("=");
+	private JButton button_punto = new JButton(".");
+	private JButton btnClear = new JButton("C");
+
+	// Variables declaration - do not modify
+	private javax.swing.JMenuBar jMenuBar1;
+	private javax.swing.JMenuItem jMenuItem3;
+	private javax.swing.JMenuItem miAbrir;
+	private javax.swing.JMenu miSalir;
+	private javax.swing.JTextField txtRuta;
 
 	JFrame frame;
 	private JTextField txtResultado;
+	private final JMenuBar menuBar = new JMenuBar();
+	private final JMenu mnNewMenu = new JMenu("File");
+	private final JMenuItem mntmAcercaDe = new JMenuItem("Acerca de...");
+	private final JMenuItem mntmSalir = new JMenuItem("Salir");
+	private final JSeparator separator = new JSeparator();
 
 	/**
 	 * Create the application.
 	 */
 	public Calculadora() {
-		agregarElementos();
-		botonesEvent();
-
+		this.agregarElementos();
+		this.botonesEvent();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	public void agregarElementos() {
+	private void agregarElementos() {
 
 		frame = new JFrame();
+		frame.setTitle("Calculadora");
 		frame.getContentPane().setBackground(new Color(36, 36, 36));
 		frame.setBounds(100, 100, 302, 415);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+		ImageIcon imgApp = new ImageIcon("/E08Calculadora/Imagenes/calc.png");
+		frame.setIconImage(imgApp.getImage());
 
 		JPanel panel = new JPanel();
-		panel.setBounds(0, 1, 291, 130);
 		frame.getContentPane().add(panel);
-		panel.setLayout(new GridLayout(0, 1, 0, 0));
+		panel.setLayout(new CardLayout(0, 0));
 
 		txtResultado = new JTextField();
-		panel.add(txtResultado);
+		panel.add(txtResultado, "name_892511373559");
 		txtResultado.setToolTipText("10");
 		txtResultado.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtResultado.setBackground(new Color(36, 36, 36));
@@ -93,10 +109,9 @@ public class Calculadora extends JFrame implements ActionListener {
 		txtResultado.setColumns(5);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(0, 131, 291, 254);
 		frame.getContentPane().add(panel_1);
 
-		panel_1.setLayout(new GridLayout(5, 5, 0, 0));
+		panel_1.setLayout(new GridLayout(5, 5, 5, 5));
 
 		JButton button_10 = new JButton("(");
 		panel_1.add(button_10);
@@ -113,122 +128,164 @@ public class Calculadora extends JFrame implements ActionListener {
 		JButton btnM = new JButton("M+");
 		panel_1.add(btnM);
 
-		// Setting property of button 7
+		// Estilos boton 7
 		button_7.setBounds(10, 230, 60, 40);
 		button_7.setFont(new Font("Arial", Font.BOLD, 20));
 		button_7.setBackground(new Color(36, 36, 36));
 		button_7.setForeground(Color.WHITE);
 		panel_1.add(button_7);
 
+		// Estilos boton 8
 		button_8.setBounds(80, 230, 60, 40);
 		button_8.setFont(new Font("Arial", Font.BOLD, 20));
 		button_8.setBackground(new Color(36, 36, 36));
 		button_8.setForeground(Color.WHITE);
 		panel_1.add(button_8);
 
+		// Estilos boton 9
 		button_9.setBounds(80, 230, 60, 40);
 		button_9.setFont(new Font("Arial", Font.BOLD, 20));
 		button_9.setBackground(new Color(36, 36, 36));
 		button_9.setForeground(Color.WHITE);
 		panel_1.add(button_9);
 
+		// Estilos boton /
 		button_division.setBounds(10, 230, 60, 40);
 		button_division.setFont(new Font("Arial", Font.BOLD, 20));
 		button_division.setBackground(new Color(249, 113, 50));
 		button_division.setForeground(Color.WHITE);
 		panel_1.add(button_division);
 
+		// Estilos boton sqrt
 		btnSqrt.setBounds(10, 230, 60, 40);
-		btnSqrt.setFont(new Font("Arial", Font.BOLD, 10));
+		btnSqrt.setFont(new Font("Arial", Font.BOLD, 5));
 		btnSqrt.setBackground(new Color(249, 113, 50));
 		btnSqrt.setForeground(Color.WHITE);
 		panel_1.add(btnSqrt);
 
+		// Estilos boton 4
 		button_4.setBounds(10, 230, 60, 40);
 		button_4.setFont(new Font("Arial", Font.BOLD, 20));
 		button_4.setBackground(new Color(36, 36, 36));
 		button_4.setForeground(Color.WHITE);
 		panel_1.add(button_4);
 
+		// Estilos boton 5
 		button_5.setBounds(10, 230, 60, 40);
 		button_5.setFont(new Font("Arial", Font.BOLD, 20));
 		button_5.setBackground(new Color(36, 36, 36));
 		button_5.setForeground(Color.WHITE);
 		panel_1.add(button_5);
 
+		// Estilos boton 6
 		button_6.setBounds(10, 230, 60, 40);
 		button_6.setFont(new Font("Arial", Font.BOLD, 20));
 		button_6.setBackground(new Color(36, 36, 36));
 		button_6.setForeground(Color.WHITE);
 		panel_1.add(button_6);
 
+		// Estilos boton *
 		button_multi.setBounds(10, 230, 60, 40);
 		button_multi.setFont(new Font("Arial", Font.BOLD, 20));
 		button_multi.setBackground(new Color(249, 113, 50));
 		button_multi.setForeground(Color.WHITE);
 		panel_1.add(button_multi);
 
+		// Estilos boton %
 		button_modulo.setBounds(10, 230, 60, 40);
 		button_modulo.setFont(new Font("Arial", Font.BOLD, 20));
 		button_modulo.setBackground(new Color(249, 113, 50));
 		button_modulo.setForeground(Color.WHITE);
 		panel_1.add(button_modulo);
 
+		// Estilos boton 1
 		button_1.setBounds(10, 230, 60, 40);
 		button_1.setFont(new Font("Arial", Font.BOLD, 20));
 		button_1.setBackground(new Color(36, 36, 36));
 		button_1.setForeground(Color.WHITE);
 		panel_1.add(button_1);
 
+		// Estilos boton 2
 		button_2.setBounds(10, 230, 60, 40);
 		button_2.setFont(new Font("Arial", Font.BOLD, 20));
 		button_2.setBackground(new Color(36, 36, 36));
 		button_2.setForeground(Color.WHITE);
 		panel_1.add(button_2);
 
+		// Estilos boton 3
 		button_3.setBounds(10, 230, 60, 40);
 		button_3.setFont(new Font("Arial", Font.BOLD, 20));
 		button_3.setBackground(new Color(36, 36, 36));
 		button_3.setForeground(Color.WHITE);
 		panel_1.add(button_3);
 
+		// Estilos boton -
 		button_resta.setBounds(10, 230, 60, 40);
 		button_resta.setFont(new Font("Arial", Font.BOLD, 20));
 		button_resta.setBackground(new Color(249, 113, 50));
 		button_resta.setForeground(Color.WHITE);
 		panel_1.add(button_resta);
 
+		// Estilos boton +
 		button_sumar.setBounds(10, 230, 60, 40);
 		button_sumar.setFont(new Font("Arial", Font.BOLD, 20));
 		button_sumar.setBackground(new Color(249, 113, 50));
 		button_sumar.setForeground(Color.WHITE);
 		panel_1.add(button_sumar);
 
+		// Estilos boton 0
 		button_0.setBounds(10, 230, 60, 40);
 		button_0.setFont(new Font("Arial", Font.BOLD, 20));
 		button_0.setBackground(new Color(36, 36, 36));
 		button_0.setForeground(Color.WHITE);
 		panel_1.add(button_0);
 
+		// Estilos boton .
 		button_punto.setBounds(10, 230, 60, 40);
 		button_punto.setFont(new Font("Arial", Font.BOLD, 15));
 		button_punto.setBackground(new Color(36, 36, 36));
 		button_punto.setForeground(Color.WHITE);
 		panel_1.add(button_punto);
 
+		// Estilos boton =
 		button_igual.setBounds(150, 410, 60, 40);
 		button_igual.setFont(new Font("Arial", Font.BOLD, 20));
 		panel_1.add(button_igual);
 
+		// Estilos boton clear
 		btnClear.setForeground(Color.RED);
 		btnClear.setFont(new Font("Arial", Font.BOLD, 20));
 		panel_1.add(btnClear);
 
 		JButton button = new JButton("+/-");
 		panel_1.add(button);
+		
+		frame.setJMenuBar(menuBar);
+		
+		menuBar.add(mnNewMenu);
+		mntmAcercaDe.setIcon(new ImageIcon(Calculadora.class.getResource("/E08Calculadora/Imagenes/info.png")));
+		mntmAcercaDe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				JOptionPane.showMessageDialog(null, "Calculadora creada por Xavi Yamuza", "Acerca de...", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
+		mnNewMenu.add(mntmAcercaDe);
+		
+		
+		mnNewMenu.add(separator);
+		mntmSalir.setIcon(new ImageIcon(Calculadora.class.getResource("/E08Calculadora/Imagenes/close.png")));
+		mntmSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(EXIT_ON_CLOSE);
+			}
+		});
+		
+		mnNewMenu.add(mntmSalir);
 	}
 
-	public void botonesEvent() {
+	private void botonesEvent() {
 		// Llamada btn-Numeros
 		button_0.addActionListener(this);
 		button_1.addActionListener(this);
@@ -260,59 +317,53 @@ public class Calculadora extends JFrame implements ActionListener {
 
 		/* Action btn-Numeros */
 		if (source == button_0) {
-			txtResultado.setText(txtResultado.getText() + "0");
+			txtResultado.setText(txtResultado.getText() + button_0.getText());
+
 		} else if (source == button_1) {
-			txtResultado.setText(txtResultado.getText() + "1");
+			txtResultado.setText(txtResultado.getText() + button_1.getText());
 		} else if (source == button_2) {
-			txtResultado.setText(txtResultado.getText() + "2");
+			txtResultado.setText(txtResultado.getText() + button_2.getText());
 		} else if (source == button_3) {
-			txtResultado.setText(txtResultado.getText() + "3");
+			txtResultado.setText(txtResultado.getText() + button_3.getText());
 		} else if (source == button_4) {
-			txtResultado.setText(txtResultado.getText() + "4");
+			txtResultado.setText(txtResultado.getText() + button_4.getText());
 		} else if (source == button_5) {
-			txtResultado.setText(txtResultado.getText() + "5");
+			txtResultado.setText(txtResultado.getText() + button_5.getText());
 		} else if (source == button_6) {
-			txtResultado.setText(txtResultado.getText() + "6");
+			txtResultado.setText(txtResultado.getText() + button_6.getText());
 		} else if (source == button_7) {
-			txtResultado.setText(txtResultado.getText() + "7");
+			txtResultado.setText(txtResultado.getText() + button_7.getText());
 		} else if (source == button_8) {
-			txtResultado.setText(txtResultado.getText() + "8");
+			txtResultado.setText(txtResultado.getText() + button_8.getText());
 		} else if (source == button_9) {
-			txtResultado.setText(txtResultado.getText() + "9");
+			txtResultado.setText(txtResultado.getText() + button_9.getText());
 		}
 
 		/* btn-BORRADO */
 		else if (source == btnClear) {
-			// label.setText("");
 			txtResultado.setText("");
 		} else if (source == button_punto) {
-			// label.setText("");
-			txtResultado.setText(txtResultado.getText() + ".");
+			txtResultado.setText(txtResultado.getText() + button_punto.getText());
 		}
 
 		/* btn-OPERACIONES */
 		else if (source == button_sumar) {
-			String aux = txtResultado.getText();
 			numero = Double.parseDouble(txtResultado.getText());
 			txtResultado.setText("");
 			refCalculo = 1;
 		} else if (source == button_resta) {
-			String aux = txtResultado.getText();
 			numero = Double.parseDouble(txtResultado.getText());
 			txtResultado.setText("");
 			refCalculo = 2;
 		} else if (source == button_multi) {
-			String aux = txtResultado.getText();
 			numero = Double.parseDouble(txtResultado.getText());
 			txtResultado.setText("");
 			refCalculo = 3;
 		} else if (source == button_division) {
-			String aux = txtResultado.getText();
 			numero = Double.parseDouble(txtResultado.getText());
 			txtResultado.setText("");
 			refCalculo = 4;
 		} else if (source == btnSqrt) {
-			String aux = txtResultado.getText();
 			numero = Double.parseDouble(txtResultado.getText());
 			double sqr = Math.pow(numero, 2);
 			String toText = Double.toString(sqr);
